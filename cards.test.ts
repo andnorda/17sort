@@ -1,18 +1,5 @@
 import { expect, test } from "vitest";
-import dft from "./card-ratings.dft.json";
-
-const cards = (id: number) => {
-  const card = dft.find((c) => c.mtga_id - 94802 === id);
-
-  if (!card) {
-    throw new Error("invalid id");
-  }
-
-  return (["url", "ever_drawn_win_rate"] as const).reduce(
-    (acc, key) => ({ ...acc, [key]: card[key] }),
-    {}
-  );
-};
+import { cards } from "./cards";
 
 test("first card", () => {
   expect(cards(1)).toEqual({

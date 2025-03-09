@@ -7,7 +7,7 @@ test.each([
   [23, "wa"],
   [24, "ww"],
   [128, "x2"],
-  [291, "7q"],
+  [271, "5f"],
   [528, "zz"],
 ])("encode decode %s %s", (id, code) => {
   expect(encode(id)).toBe(code);
