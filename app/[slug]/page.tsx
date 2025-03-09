@@ -1,6 +1,7 @@
 import { cards } from "@/cards";
 import { decode } from "@/id";
 import DraggableCardList from "./draggable-card-list";
+import Complete from "./complete";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const { slug } = await params;
@@ -13,7 +14,14 @@ const Page = async ({ params }: { params: { slug: string } }) => {
           .map(decode)
       : [85, 212, 15, 198, 42];
 
-  return <DraggableCardList cards={initialIds.map(cards)} />;
+  const cardList = initialIds.map(cards);
+
+  return (
+    <>
+      <DraggableCardList cards={cardList} />
+      <Complete cards={cardList} />
+    </>
+  );
 };
 
 export default Page;
