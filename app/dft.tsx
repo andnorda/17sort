@@ -12,7 +12,6 @@ const Dft = ({ levels }: { levels: Level[] }) => {
   ] = useGameState(levels);
 
   if (gameResults) {
-    console.log("here", gameResults);
     return (
       <div>
         <h1>Game Over</h1>
