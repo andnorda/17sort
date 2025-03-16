@@ -1,7 +1,6 @@
 import { cards } from "@/cards";
-import { decode } from "@/id";
-import DraggableCardList from "./draggable-card-list";
-import Complete from "./complete";
+import { decode, encode } from "@/id";
+import Game from "../game";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const { slug } = await params;
@@ -17,10 +16,13 @@ const Page = async ({ params }: { params: { slug: string } }) => {
   const cardList = initialIds.map(cards);
 
   return (
-    <>
-      <DraggableCardList cards={cardList} />
-      <Complete cards={cardList} />
-    </>
+    <Game
+      cards={cardList}
+      next={`/${[...self.crypto.getRandomValues(new Uint32Array(5))]
+        .map((n) => n % 271)
+        .map((n) => encode(n))
+        .join("")}`}
+    />
   );
 };
 

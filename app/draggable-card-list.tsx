@@ -8,11 +8,16 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import Image from "next/image";
-import { useState } from "react";
 
-const DraggableCardList = ({ cards }: { cards: Card[] }) => {
-  const [cardList, setCardList] = useState(cards);
-
+const DraggableCardList = ({
+  cards,
+  setOrder,
+  done,
+}: {
+  cards: Card[];
+  setOrder: (order: number[]) => void;
+  done: boolean;
+}) => {
   const onDragEnd = (result: DropResult) => {
     // dropped outside the list
     if (!result.destination) {
@@ -27,12 +32,12 @@ const DraggableCardList = ({ cards }: { cards: Card[] }) => {
     };
 
     const newCardList = reorder(
-      cardList,
+      cards,
       result.source.index,
       result.destination.index
     );
 
-    setCardList(newCardList);
+    setOrder(newCardList.map((card) => card.mtga_id));
   };
 
   return (
@@ -40,8 +45,13 @@ const DraggableCardList = ({ cards }: { cards: Card[] }) => {
       <Droppable droppableId="droppable" direction="horizontal">
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
-            {cardList.map((card, index) => (
-              <Draggable key={card.url} draggableId={card.url} index={index}>
+            {cards.map((card, index) => (
+              <Draggable
+                key={card.url}
+                draggableId={card.url}
+                index={index}
+                isDragDisabled={done}
+              >
                 {(provided) => (
                   <Image
                     ref={provided.innerRef}
