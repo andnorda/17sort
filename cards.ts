@@ -75,7 +75,8 @@ export const cards = (id: number): Card => {
 
   return {
     url: card.url,
-    ever_drawn_win_rate: card.ever_drawn_win_rate ?? -1,
+    ever_drawn_win_rate:
+      Math.floor((card.ever_drawn_win_rate ?? -1) * 1000) / 10,
     mtga_id: card.mtga_id,
   };
 };

@@ -2,13 +2,11 @@
 
 import { Card } from "@/cards";
 import Image from "next/image";
-import Link from "next/link";
 
 const Complete = ({
   cards,
   done,
   setDone,
-  next,
 }: {
   cards: Card[];
   done: boolean;
@@ -25,17 +23,23 @@ const Complete = ({
             {cards
               .toSorted((a, b) => b.ever_drawn_win_rate - a.ever_drawn_win_rate)
               .map((card) => (
-                <div key={card.url}>
+                <div key={card.url} style={{ position: "relative" }}>
                   <Image src={card.url} width={256} height={357} alt="" />
-                  <p>{card.ever_drawn_win_rate}</p>
+                  <p
+                    style={{
+                      position: "absolute",
+                      top: "20%",
+                      left: "50%",
+                      transform: "translate(-50%)",
+                      fontSize: "4.5rem",
+                      textShadow: "0 0 4px var(--black)",
+                    }}
+                  >
+                    {card.ever_drawn_win_rate.toFixed(1)}%
+                  </p>
                 </div>
               ))}
           </div>
-          {typeof next === "string" ? (
-            <Link href={next}>Next</Link>
-          ) : (
-            <button onClick={next}>Next</button>
-          )}
         </>
       )}
     </>

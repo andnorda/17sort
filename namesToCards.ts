@@ -1,11 +1,11 @@
 import dft from "./card-ratings.dft.json";
-import { CardRating } from "./cards";
+import { Card, CardRating } from "./cards";
 
-const cards = dft as CardRating[];
+const cs = dft as CardRating[];
 
-export const namesToCards = (cardNames: string[]): CardRating[] => {
+export const namesToCards = (cardNames: string[]): Card[] => {
   return cardNames.map((name) => {
-    const card = cards.find((c) => c.name === name);
+    const card = cs.find((c) => c.name === name);
     if (!card) throw new Error(`Card not found: ${name}`);
     return card;
   });

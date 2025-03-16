@@ -17,6 +17,17 @@ const Game = ({
 }) => {
   return (
     <>
+      <p>
+        Sort cards based on{" "}
+        <a
+          href="https://www.17lands.com/metrics_definitions"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          17lands.com Games in Hand Win Rate
+        </a>
+        .
+      </p>
       <DraggableCardList done={done} cards={cards} setOrder={setOrder} />
       <Complete done={done} setDone={setDone} cards={cards} next={next} />
     </>

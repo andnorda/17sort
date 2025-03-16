@@ -1,5 +1,5 @@
 import dft from "@/card-ratings.dft.json";
-import { Card, CardRating } from "@/cards";
+import { Card, CardRating, cards } from "@/cards";
 import { namesToCards } from "@/namesToCards";
 import Dft from "../dft";
 
@@ -8,7 +8,7 @@ export interface Level {
   cards: Card[];
 }
 
-const cards = dft as CardRating[];
+const cs = dft as CardRating[];
 
 const Page = () => {
   return (
@@ -36,7 +36,7 @@ const Page = () => {
         },
         {
           description: "Top commons",
-          cards: cards
+          cards: cs
             .filter((c) => c.rarity === "common")
             .toSorted((a, b) => b.ever_drawn_win_rate - a.ever_drawn_win_rate)
             .slice(0, 5)
@@ -44,7 +44,7 @@ const Page = () => {
         },
         {
           description: "Top red commons",
-          cards: cards
+          cards: cs
             .filter(
               (c) =>
                 c.rarity === "common" && c.color === "R" && c.mtga_id <= 95073
@@ -55,7 +55,7 @@ const Page = () => {
         },
         {
           description: "Top uncommons",
-          cards: cards
+          cards: cs
             .filter((c) => c.rarity === "uncommon")
             .toSorted((a, b) => b.ever_drawn_win_rate - a.ever_drawn_win_rate)
             .slice(0, 5)
@@ -68,7 +68,7 @@ const Page = () => {
             .split("")
             .map(
               (color) =>
-                cards
+                cs
                   .filter((c) => c.rarity === "common" && c.color === color)
                   .toSorted(
                     (a, b) => b.ever_drawn_win_rate - a.ever_drawn_win_rate
@@ -97,11 +97,7 @@ const Page = () => {
         },
       ].map((level) => ({
         ...level,
-        cards: level.cards.map((c) => ({
-          ever_drawn_win_rate: c.ever_drawn_win_rate,
-          mtga_id: c.mtga_id,
-          url: c.url,
-        })),
+        cards: level.cards.map((c) => cards(c.mtga_id - 94802)),
       }))}
     />
   );

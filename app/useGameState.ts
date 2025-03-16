@@ -53,7 +53,7 @@ const useGameState = (
             ],
             levelResults: calculateInsertions(
               state.currentLevel?.cards
-                .map((c) => c.ever_drawn_win_rate)
+                .map((c) => c.ever_drawn_win_rate * 10)
                 .toReversed() ?? []
             ),
           };
@@ -98,7 +98,7 @@ const useGameState = (
                 .map(
                   (id) => levels[i].cards.find((card) => card.mtga_id === id)!
                 )
-                .map((card) => card.ever_drawn_win_rate)
+                .map((card) => card.ever_drawn_win_rate * 10)
                 .toReversed()
             )
           )

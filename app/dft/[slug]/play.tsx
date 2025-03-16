@@ -12,9 +12,11 @@ const Play = ({ cards, next }: { cards: Card[]; next: string }) => {
   const levelResults = calculateInsertions(
     order
       .map((id) => cards.find((c) => c.mtga_id === id)!)
-      .map((c) => c.ever_drawn_win_rate)
+      .map((c) => c.ever_drawn_win_rate * 10)
       .toReversed()
   );
+
+  const tot = levelResults.reduce((acc, r) => acc + r.cost, 0) / 10;
 
   return (
     <>
@@ -27,12 +29,21 @@ const Play = ({ cards, next }: { cards: Card[]; next: string }) => {
       />
       {done && (
         <>
-          <div>Insertions: {levelResults.length}</div>
-          <div>
-            Swaps:{" "}
-            {levelResults.reduce((acc, r) => acc + Math.abs(r.from - r.to), 0)}
-          </div>
-          <div>Error: {levelResults.reduce((acc, r) => acc + r.cost, 0)}</div>
+          {tot === 0 ? (
+            <p>You nailed it! 🎉</p>
+          ) : (
+            <p>
+              You were off by{" "}
+              {levelResults.reduce((acc, r) => acc + r.cost, 0) / 10} percentage
+              points (
+              {levelResults.reduce(
+                (acc, r) => acc + Math.abs(r.from - r.to),
+                0
+              )}{" "}
+              swaps).
+            </p>
+          )}
+          <a href={next}>Next</a>
         </>
       )}
     </>

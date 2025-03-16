@@ -17,7 +17,7 @@ const Dft = ({ levels }: { levels: Level[] }) => {
     reset,
   } = useGameState(levels);
 
-  if (gameResults) {
+  if (!levelResults && gameResults) {
     return (
       <div>
         <h1>Game Over</h1>
@@ -42,7 +42,8 @@ const Dft = ({ levels }: { levels: Level[] }) => {
         <div>
           Error:{" "}
           {gameResults.reduce(
-            (acc, level) => acc + level.reduce((acc, r) => acc + r.cost, 0),
+            (acc, level) =>
+              acc + level.reduce((acc, r) => acc + r.cost, 0) / 10,
             0
           )}
         </div>
@@ -54,7 +55,7 @@ const Dft = ({ levels }: { levels: Level[] }) => {
                 Swaps:{" "}
                 {level.reduce((acc, r) => acc + Math.abs(r.from - r.to), 0)}
               </div>
-              <div>Error: {level.reduce((acc, r) => acc + r.cost, 0)}</div>
+              <div>Error: {level.reduce((acc, r) => acc + r.cost, 0) / 10}</div>
             </div>
           ))}
         </div>
@@ -63,6 +64,10 @@ const Dft = ({ levels }: { levels: Level[] }) => {
   }
 
   if (!currentLevel) return null;
+
+  const tot = levelResults?.reduce((acc, r) => acc + r.cost, 0);
+
+  console.log(levelResults);
 
   return (
     <>
@@ -75,12 +80,21 @@ const Dft = ({ levels }: { levels: Level[] }) => {
       />
       {levelResults && (
         <>
-          <div>Insertions: {levelResults.length}</div>
-          <div>
-            Swaps:{" "}
-            {levelResults.reduce((acc, r) => acc + Math.abs(r.from - r.to), 0)}
-          </div>
-          <div>Error: {levelResults.reduce((acc, r) => acc + r.cost, 0)}</div>
+          {tot === 0 ? (
+            <p>You nailed it! 🎉</p>
+          ) : (
+            <p>
+              You were off by{" "}
+              {levelResults.reduce((acc, r) => acc + r.cost, 0) / 10} percentage
+              points (
+              {levelResults.reduce(
+                (acc, r) => acc + Math.abs(r.from - r.to),
+                0
+              )}{" "}
+              swaps).
+            </p>
+          )}
+          <button onClick={next}>Next</button>
         </>
       )}
     </>
