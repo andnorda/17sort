@@ -87,8 +87,6 @@ const useGameState = (
     }
   });
 
-  console.log(state.log);
-
   return {
     currentLevel: state.currentLevel,
     levelResults: state.levelResults,

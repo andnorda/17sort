@@ -24,7 +24,5 @@ export const generateNewLevel = () => {
   const fifth = c.toSpliced(c.indexOf(fourth), 1)[
     Math.floor(Math.random() * c.length - 1)
   ];
-  const res = [first, second, third, fourth, fifth];
-  console.log(res);
-  return res.map(encode);
+  return [first, second, third, fourth, fifth].map(encode);
 };
