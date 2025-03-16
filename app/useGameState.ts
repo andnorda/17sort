@@ -97,14 +97,19 @@ const useGameState = (
     {
       currentLevel: state.currentLevel,
       levelResults: state.levelResults,
-      gameResults: state.log.map((log, i) =>
-        calculateInsertions(
-          log
-            .map((id) => levels[i].cards.find((card) => card.mtga_id === id)!)
-            .map((card) => card.ever_drawn_win_rate)
-            .toReversed()
-        )
-      ),
+      gameResults:
+        state.log.length === levels.length
+          ? state.log.map((log, i) =>
+              calculateInsertions(
+                log
+                  .map(
+                    (id) => levels[i].cards.find((card) => card.mtga_id === id)!
+                  )
+                  .map((card) => card.ever_drawn_win_rate)
+                  .toReversed()
+              )
+            )
+          : undefined,
     },
     {
       submit: () => {
