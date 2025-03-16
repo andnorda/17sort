@@ -67,6 +67,7 @@ const Dft = ({ levels }: { levels: Level[] }) => {
 
   const tot = levelResults?.reduce((acc, r) => acc + r.cost, 0);
 
+  console.log(currentLevel.cards.map((c) => c.ever_drawn_win_rate * 10));
   console.log(levelResults);
 
   return (

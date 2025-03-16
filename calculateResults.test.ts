@@ -68,7 +68,10 @@ test("already sorted descending", () => {
 });
 
 test("longer array - mixed insertions", () => {
-  expect(calculateInsertions([5, 1, 4, 2, 8, 0, 3])).toEqual([
+  const calc = calculateInsertions([5, 1, 4, 2, 8, 0, 3]);
+  expect(calc.reduce((acc, r) => acc + r.cost, 0)).toBe(19);
+  expect(calc.reduce((acc, r) => acc + Math.abs(r.from - r.to), 0)).toBe(12);
+  expect(calc).toEqual([
     { from: 0, to: 3, cost: 4 },
     { from: 2, to: 1, cost: 2 },
     { from: 5, to: 0, cost: 8 },
@@ -108,10 +111,17 @@ test("near sorted - one swap at the beginning", () => {
   ]);
 });
 
-test("all same numbers", () => {
-  expect(calculateInsertions([5, 5, 5, 5])).toEqual([]);
+test("top commons", () => {
+  expect(calculateInsertions([2, 4, 0, 1, 3])).toEqual([
+    { from: 1, to: 4, cost: 4 },
+    { from: 0, to: 2, cost: 2 },
+  ]);
 });
 
-// test.only("javier", () => {
-//   expect(calculateInsertions([0, 20, 57, 63, 44])).toEqual([]);
-// });
+test("top commons reversed", () => {
+  expect(calculateInsertions([3, 1, 0, 4, 2])).toEqual([
+    { cost: 2, from: 1, to: 0 },
+    { cost: 3, from: 2, to: 0 },
+    { cost: 2, from: 4, to: 2 },
+  ]);
+});
