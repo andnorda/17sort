@@ -1,5 +1,5 @@
 import { useEffect, useReducer } from "react";
-import { Level } from "./page";
+import { Level } from "./dft/page";
 import { calculateInsertions, Insertion } from "@/calculateResults";
 
 const useGameState = (

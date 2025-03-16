@@ -1,6 +1,7 @@
 import { cards } from "@/cards";
-import { decode, encode } from "@/id";
-import Game from "../game";
+import { decode } from "@/id";
+import Play from "./play";
+import { generateNewLevel } from "@/generateNewLevel";
 
 const Page = async ({ params }: { params: { slug: string } }) => {
   const { slug } = await params;
@@ -15,15 +16,7 @@ const Page = async ({ params }: { params: { slug: string } }) => {
 
   const cardList = initialIds.map(cards);
 
-  return (
-    <Game
-      cards={cardList}
-      next={`/${[...self.crypto.getRandomValues(new Uint32Array(5))]
-        .map((n) => n % 271)
-        .map((n) => encode(n))
-        .join("")}`}
-    />
-  );
+  return <Play cards={cardList} next={`/dft/${generateNewLevel().join("")}`} />;
 };
 
 export default Page;

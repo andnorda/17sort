@@ -1,7 +1,7 @@
 import dft from "@/card-ratings.dft.json";
 import { Card, CardRating } from "@/cards";
 import { namesToCards } from "@/namesToCards";
-import Dft from "./dft";
+import Dft from "../dft";
 
 export interface Level {
   description: string;

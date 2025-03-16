@@ -3,7 +3,8 @@
 import Game from "@/app/game";
 import React from "react";
 import useGameState from "./useGameState";
-import { Level } from "./page";
+import { Level } from "./dft/page";
+import { encode } from "@/id";
 
 const Dft = ({ levels }: { levels: Level[] }) => {
   const {
@@ -21,6 +22,14 @@ const Dft = ({ levels }: { levels: Level[] }) => {
       <div>
         <h1>Game Over</h1>
         <button onClick={reset}>Play again</button>
+        <a
+          href={`/dft/${[...self.crypto.getRandomValues(new Uint32Array(5))]
+            .map((n) => n % 271)
+            .map((n) => encode(n))
+            .join("")}`}
+        >
+          Play random level
+        </a>
         <div>Total score</div>
         <div>
           Swaps:{" "}
