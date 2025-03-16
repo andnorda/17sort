@@ -4,18 +4,15 @@ import { calculateInsertions, Insertion } from "@/calculateResults";
 
 const useGameState = (
   levels: Level[]
-): [
-  {
-    currentLevel?: Level;
-    levelResults?: Insertion[];
-    gameResults?: Insertion[][];
-  },
-  {
-    submit: () => void;
-    next: () => void;
-    setOrder: (order: number[]) => void;
-  }
-] => {
+): {
+  currentLevel?: Level;
+  levelResults?: Insertion[];
+  gameResults?: Insertion[][];
+  submit: () => void;
+  next: () => void;
+  setOrder: (order: number[]) => void;
+  reset: () => void;
+} => {
   const [state, dispatch] = useReducer(
     (
       state: {
@@ -33,7 +30,6 @@ const useGameState = (
         case "init":
           const currentLevel = levels[action.log.length];
           return {
-            ...state,
             log: action.log,
             currentLevel,
           };
@@ -93,32 +89,33 @@ const useGameState = (
 
   console.log(state.log);
 
-  return [
-    {
-      currentLevel: state.currentLevel,
-      levelResults: state.levelResults,
-      gameResults:
-        state.log.length === levels.length
-          ? state.log.map((log, i) =>
-              calculateInsertions(
-                log
-                  .map(
-                    (id) => levels[i].cards.find((card) => card.mtga_id === id)!
-                  )
-                  .map((card) => card.ever_drawn_win_rate)
-                  .toReversed()
-              )
+  return {
+    currentLevel: state.currentLevel,
+    levelResults: state.levelResults,
+    gameResults:
+      state.log.length === levels.length
+        ? state.log.map((log, i) =>
+            calculateInsertions(
+              log
+                .map(
+                  (id) => levels[i].cards.find((card) => card.mtga_id === id)!
+                )
+                .map((card) => card.ever_drawn_win_rate)
+                .toReversed()
             )
-          : undefined,
+          )
+        : undefined,
+
+    submit: () => {
+      dispatch({ type: "submit" });
     },
-    {
-      submit: () => {
-        dispatch({ type: "submit" });
-      },
-      next: () => dispatch({ type: "next" }),
-      setOrder: (order) => dispatch({ type: "setOrder", order }),
+    next: () => dispatch({ type: "next" }),
+    setOrder: (order) => dispatch({ type: "setOrder", order }),
+    reset: () => {
+      dispatch({ type: "init", log: [] });
+      window.localStorage.removeItem("game-state");
     },
-  ];
+  };
 };
 
 export default useGameState;

@@ -6,15 +6,21 @@ import useGameState from "./useGameState";
 import { Level } from "./page";
 
 const Dft = ({ levels }: { levels: Level[] }) => {
-  const [
-    { currentLevel, levelResults, gameResults },
-    { submit, next, setOrder },
-  ] = useGameState(levels);
+  const {
+    currentLevel,
+    levelResults,
+    gameResults,
+    submit,
+    next,
+    setOrder,
+    reset,
+  } = useGameState(levels);
 
   if (gameResults) {
     return (
       <div>
         <h1>Game Over</h1>
+        <button onClick={reset}>Play again</button>
         <div>Total score</div>
         <div>
           Swaps:{" "}
