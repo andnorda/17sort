@@ -33,63 +33,58 @@ const longestIncreasingSubsequence = (numbers: number[]): number[] => {
   return lis;
 };
 
-export const calculateInsertions = (numbers: number[]): Insertion[] => {
-  const lis = longestIncreasingSubsequence(numbers);
+export const calculateInsertions = (
+  numbers: number[],
+  lis = longestIncreasingSubsequence(numbers)
+): Insertion[] => {
+  if (numbers.length === lis.length) {
+    return [];
+  }
 
   const getTo = (from: number) => {
-    const larger = lis.find((l) => l > numbers[from])!;
-    const to = numbers.indexOf(larger);
-    if (larger) {
-      if (to > from) {
-        return to - 1;
-      } else {
-        return to;
-      }
-    } else {
-      return numbers.indexOf(Math.max(...lis));
+    const to = numbers.findIndex((n) => lis.includes(n) && n > numbers[from]);
+    if (to === -1) {
+      return numbers.length - 1;
     }
+    if (to > from) {
+      return to - 1;
+    }
+    return to;
   };
 
-  const allFrom = numbers
-    .map((n, i) => (lis.includes(n) ? undefined : i))
-    .filter((i) => i !== undefined);
-  if (allFrom.length === 0) {
-    return [];
-  }
-  const diff = allFrom.map((from) => getTo(from) - from);
-  const from = diff.every((d) => d > 0)
-    ? Math.max(...allFrom)
-    : Math.min(...allFrom);
+  const getFrom = () => {
+    const allFrom = numbers
+      .map((n, i) => (lis.includes(n) ? undefined : i))
+      .filter((i) => i !== undefined);
+
+    return allFrom.some((from) => from > getTo(from))
+      ? allFrom.some((from) => from < getTo(from))
+        ? allFrom.find(
+            (_, i, array) =>
+              array
+                .map((from) => Math.abs(getTo(from) - from))
+                .findIndex((d, _, a) => d === Math.min(...a)) === i
+          )!
+        : Math.min(...allFrom)
+      : Math.max(...allFrom);
+  };
+
+  const from = getFrom();
   const to = getTo(from);
 
-  if (from === -1) {
-    return [];
-  } else {
-    const newArray = numbers.toSpliced(from, 1).toSpliced(to, 0, numbers[from]);
-    const isSorted = newArray.every((n, i) => i === 0 || n >= newArray[i - 1]);
-    const cost = Math.max(
-      ...numbers
-        .slice(Math.min(from + 1, to), Math.max(from, to + 1))
-        .map((n) => Math.abs(n - numbers[from]))
-    );
-
-    console.log({
-      numbers,
+  return [
+    {
       from,
       to,
-      allFrom,
-      diff,
-      cost,
-      dist: Math.abs(to - from),
-      newArray,
-    });
-    return [
-      {
-        from,
-        to,
-        cost,
-      },
-      ...(isSorted ? [] : calculateInsertions(newArray)),
-    ];
-  }
+      cost: Math.max(
+        ...numbers
+          .slice(Math.min(from, to), Math.max(from, to))
+          .map((n) => Math.abs(n - numbers[from]))
+      ),
+    },
+    ...calculateInsertions(
+      numbers.toSpliced(from, 1).toSpliced(to, 0, numbers[from]),
+      [...lis, numbers[from]].toSorted()
+    ),
+  ];
 };
