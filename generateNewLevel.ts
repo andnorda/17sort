@@ -10,8 +10,7 @@ export const generateNewLevel = () => {
   let res: Card[] = [];
   while (res.length < 5) {
     const c = cs[Math.floor(Math.random() * cs.length)];
-    console.log(res);
-    if (!res.some((r) => r.ever_drawn_win_rate === c.ever_drawn_win_rate)) {
+    if (res.every((r) => r.ever_drawn_win_rate !== c.ever_drawn_win_rate)) {
       res = [...res, c];
     }
   }
