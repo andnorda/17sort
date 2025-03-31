@@ -3,7 +3,7 @@ import { decode } from "@/id";
 import Play from "./play";
 import { generateNewLevel } from "@/generateNewLevel";
 
-const Page = async ({ params }: { params: { slug: string } }) => {
+const Page = async ({ params }: { params: Promise<{ slug: string }> }) => {
   const { slug } = await params;
 
   const initialIds =
